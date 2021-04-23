@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Testing</title>
+</head>
+<body>
+    <h1 th:text="${title}"></h1>
+    <h3 id="title"></h3>
+</body>
+</html>
+
+<script>
+    window.onload= function(){
+        document.getElementById("title").innerText = "666666666";
+    }
+</script>

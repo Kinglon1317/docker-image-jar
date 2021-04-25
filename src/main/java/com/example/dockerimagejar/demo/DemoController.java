@@ -3,6 +3,7 @@ package com.example.dockerimagejar.demo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class DemoController {
@@ -14,6 +15,7 @@ public class DemoController {
     }
 
     @RequestMapping("/hello")
+    @ResponseBody
     public String hello(){
         return "你好!这是测试";
     }

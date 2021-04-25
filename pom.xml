@@ -13,8 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>docker-image-jar</name>
     <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
     <properties>
         <java.version>1.8</java.version>
+        <docker.image.prefix>docker</docker.image.prefix>
+        <docker.repostory>375844669971.dkr.ecr.ap-east-1.amazonaws.com</docker.repostory>
+        <docker.registry.name>ptk-ecr-private</docker.registry.name>
     </properties>
     <dependencies>
         <dependency>
@@ -54,6 +58,14 @@
 
     <build>
         <plugins>
+            <!-- 跳过单元测试 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -65,6 +77,43 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <!--使用docker-maven-plugin插件-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId >docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <!--将插件绑定在某个phase执行-->
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <!--用户只需执行mvn package ，就会自动执行mvn docker:build-->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                    <configuration>
+                        <!-- 私有仓库配置，与maven的settings.xml中的<server>的<id>对应 -->
+                        <serverId>docker-aws</serverId>
+                        <!-- 远程仓库地址 -->
+                        <registryUrl>${docker.repostory}</registryUrl>
+                        <!-- 覆盖相同标签镜像 -->
+                        <forceTags>true</forceTags>
+                        <!-- install阶段上传镜像 -->
+                        <pushImage>true</pushImage>
+                        <dockerDirectory>src/main/docker</dockerDirectory>
+                        <imageName>${docker.repostory}/${docker.registry.name}:${project.version}</imageName>
+                        <dockerHost>http://192.168.1.101:2375</dockerHost>
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                    </configuration>
             </plugin>
         </plugins>
     </build>

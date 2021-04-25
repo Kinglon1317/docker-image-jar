@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-east-1 | docker login --username AWS --password-stdin 375844669971.dkr.ecr.ap-east-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t ptk-ecr-private:latest .
+      - docker tag ptk-ecr-private:latest 375844669971.dkr.ecr.ap-east-1.amazonaws.com/ptk-ecr-private:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 375844669971.dkr.ecr.ap-east-1.amazonaws.com/ptk-ecr-private:latest

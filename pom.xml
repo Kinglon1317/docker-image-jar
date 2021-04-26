@@ -83,7 +83,7 @@
                 <groupId>com.spotify</groupId>
                 <artifactId >docker-maven-plugin</artifactId>
                 <version>1.0.0</version>
-                <!--将插件绑定在某个phase执行-->
+                <!--将插件绑定在某个phase执行(推送到远程aws需要注释或者跳过docker build的操作)-->
 <!--                <executions>-->
 <!--                    <execution>-->
 <!--                        <id>build-image</id>-->
@@ -103,7 +103,7 @@
                         <forceTags>true</forceTags>
                         <!-- install阶段上传镜像 -->
                         <pushImage>true</pushImage>
-                        <dockerDirectory>src/main/docker</dockerDirectory>
+                        <dockerDirectory>src/main/dockerbuildIDE</dockerDirectory>
                         <imageName>${docker.repostory}/${docker.registry.name}:${project.version}</imageName>
                         <dockerHost>http://192.168.1.101:2375</dockerHost>
                         <resources>

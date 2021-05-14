@@ -4,9 +4,12 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
+      - kubectl config view
+      - aws eks update-kubeconfig --name arn:aws:eks:ap-east-1:375844669971:cluster/PTK-EKS --kubeconfig ./config
+      - kubectl config view
 #      - kubectl config set-cluster arn:aws:eks:ap-east-1:375844669971:cluster/PTK-EKS --server=https://A5A58ED4F2599EEA0E75BDD8EBE7169A.sk1.ap-east-1.eks.amazonaws.com
 #      - kubectl config set-cluster arn:aws:eks:ap-east-1:375844669971:cluster/PTK-EKS --insecure-skip-tls-verify=true
-      - kubectl --kubeconfig ./config get node
+      - kubectl --kubeconfig /HOME/.kube/config get node
       - mvn package
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:

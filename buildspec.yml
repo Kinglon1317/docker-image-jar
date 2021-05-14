@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - kubectl config set-cluster kubernetes \
+      - kubectl config set-cluster PTK-EKS \
                 --kubeconfig=./config
       - kubectl get node
       - mvn package
